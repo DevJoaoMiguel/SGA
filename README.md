@@ -89,14 +89,7 @@ prisma/            # Configurações e migrações do Prisma
 - Sequência continua para o fundo do corredor
 - Mapeamento visual da localização no sistema
 
-### Sistema de QR Code
-- QR Code contém o ID único do armário (Corredor-Coluna-Posição)
-- Informações de localização física embutidas no QR Code
-- Visualização da posição exata no mapa do sistema
-- QR Codes são gerados e validados pelo sistema administrativo
-
 ### Processo de Reserva
-- Aluno escaneia o QR Code do armário desejado
 - Sistema verifica a disponibilidade em tempo real
 - Bloqueio temporário do armário durante o processo de reserva
 - Prazo limite para conclusão do processo de pagamento e contrato
@@ -149,114 +142,6 @@ O sistema utiliza um modelo de dados relacional com as seguintes característica
 - Loja virtual integrada
 - Gestão de manutenções
 
-### Dicionário de Dados
-
-#### School (Escola)
-| Campo         | Tipo      | Descrição                                    |
-|--------------|-----------|----------------------------------------------|
-| id           | Int       | Identificador único da escola                |
-| code         | String    | Código oficial da escola                     |
-| name         | String    | Nome da escola                               |
-| address      | String    | Endereço completo                           |
-| city         | String    | Cidade                                      |
-| state        | String    | Estado                                      |
-| phone        | String    | Telefone de contato                         |
-| email        | String    | Email oficial                               |
-| principal    | String    | Nome do(a) diretor(a)                       |
-| coordinator  | String    | Nome do(a) coordenador(a)                   |
-| type         | String    | Tipo de escola (pública, privada, etc)      |
-| active       | Boolean   | Status de ativação da escola                |
-| createdAt    | DateTime  | Data de criação do registro                 |
-| updatedAt    | DateTime  | Data da última atualização                  |
-
-#### PhysicalStructure (Estrutura Física)
-| Campo       | Tipo      | Descrição                                    |
-|------------|-----------|----------------------------------------------|
-| id         | Int       | Identificador único da estrutura             |
-| schoolId   | Int       | ID da escola                                 |
-| name       | String    | Nome da estrutura                            |
-| type       | String    | Tipo (building, floor, corridor, section)    |
-| parentId   | Int?      | ID da estrutura pai (opcional)               |
-| description| String?   | Descrição da estrutura                       |
-| order      | Int       | Ordem de exibição                            |
-| active     | Boolean   | Status de ativação                           |
-
-#### Locker (Armário)
-| Campo           | Tipo      | Descrição                                    |
-|----------------|-----------|----------------------------------------------|
-| id             | Int       | Identificador único do armário               |
-| locationId     | String    | ID de localização baseado no padrão da escola|
-| structureId    | Int       | ID da estrutura física                       |
-| position       | Int       | Posição dentro da estrutura                  |
-| qrCode         | String    | Código QR único                              |
-| status         | String    | Status (available, reserved, rented)         |
-| condition      | String    | Condição física do armário                   |
-| pricePeriod    | Float     | Preço por período                            |
-| priceYear      | Float     | Preço anual                                  |
-| lastMaintenance| DateTime? | Data da última manutenção                    |
-
-#### User (Usuário/Aluno)
-| Campo           | Tipo      | Descrição                                    |
-|----------------|-----------|----------------------------------------------|
-| id             | Int       | Identificador único do usuário               |
-| studentId      | Int       | Número de matrícula                          |
-| firstName      | String    | Nome                                         |
-| lastName       | String    | Sobrenome                                    |
-| email          | String    | Email do usuário                             |
-| password       | String    | Senha (hash)                                 |
-| course         | String    | Curso                                        |
-| period         | Int       | Período atual                                |
-| educationType  | String    | Tipo de ensino                               |
-| active         | Boolean   | Status da conta                              |
-| expiresAt      | DateTime  | Data de expiração da conta                   |
-
-#### Rental (Aluguel)
-| Campo       | Tipo      | Descrição                                    |
-|------------|-----------|----------------------------------------------|
-| id         | String    | Identificador único do aluguel               |
-| lockerId   | Int       | ID do armário                                |
-| userId     | Int       | ID do usuário                                |
-| startDate  | DateTime  | Data de início                               |
-| endDate    | DateTime  | Data de término                              |
-| rentType   | String    | Tipo (period/year)                           |
-| value      | Float     | Valor do aluguel                             |
-| status     | String    | Status do aluguel                            |
-| contractUrl| String    | URL do contrato                              |
-
-#### Payment (Pagamento)
-| Campo          | Tipo      | Descrição                                    |
-|---------------|-----------|----------------------------------------------|
-| id            | String    | Identificador único do pagamento             |
-| rentalId      | String    | ID do aluguel                                |
-| amount        | Float     | Valor do pagamento                           |
-| method        | String    | Método (pix, credit_card, debit_card)        |
-| status        | String    | Status do pagamento                          |
-| paymentDetails| Json      | Detalhes específicos do pagamento            |
-| transactionId | String?   | ID da transação no gateway                   |
-| paidAt        | DateTime? | Data do pagamento                            |
-
-#### Product (Produto)
-| Campo       | Tipo      | Descrição                                    |
-|------------|-----------|----------------------------------------------|
-| id         | Int       | Identificador único do produto               |
-| name       | String    | Nome do produto                              |
-| description| String    | Descrição                                    |
-| price      | Float     | Preço                                        |
-| stock      | Int       | Quantidade em estoque                        |
-| category   | String    | Categoria do produto                         |
-| active     | Boolean   | Status de disponibilidade                    |
-| imageUrl   | String?   | URL da imagem                                |
-
-#### Maintenance (Manutenção)
-| Campo        | Tipo      | Descrição                                    |
-|-------------|-----------|----------------------------------------------|
-| id          | Int       | Identificador único da manutenção            |
-| lockerId    | Int       | ID do armário                                |
-| type        | String    | Tipo (routine, repair, cleaning)             |
-| description | String    | Descrição do serviço                         |
-| status      | String    | Status da manutenção                         |
-| scheduledFor| DateTime  | Data agendada                                |
-| completedAt | DateTime? | Data de conclusão                            |
 
 ### Relacionamentos Principais
 
@@ -314,7 +199,6 @@ Este projeto está sob a licença ISC - veja o arquivo [LICENSE](LICENSE) para d
 ## 🚀 Funcionalidades Principais
 
 ### Sistema de Armários
-- Aluguel por QR Code
 - Períodos de locação por módulo ou anual
 - Pagamento via PIX, cartão de débito ou crédito
 - Gestão automatizada de disponibilidade
@@ -366,7 +250,6 @@ Este projeto está sob a licença ISC - veja o arquivo [LICENSE](LICENSE) para d
 ## ⚙️ Processo de Aluguel
 
 1. **Seleção do Armário**
-   - Aluno escaneia QR Code do armário desejado
    - Sistema verifica disponibilidade
    - Exibe informações e preços
 
