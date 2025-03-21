@@ -1,4 +1,4 @@
-# SGA_LOCKS - Sistema de Gerenciamento de Armários e Loja Escolar
+# SGA- Sistema de Gerenciamento de Armários e Loja Escolar
 
 Sistema integrado para gerenciamento de armários escolares e loja virtual da ETEC. O sistema permite que alunos aluguem armários através de QR Codes e realizem compras de produtos fornecidos pela escola.
 
